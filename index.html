@@ -1,50 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
 
-    <link rel="stylesheet" href="style.css" />
-    <link rel="icon" type="image/x-icon" href="favicon.png">
-    <title>Password Generator</title>
-  </head>
-  <body>
-    <div class="container">
-      <h2>Password Generator</h2>
-      <div class="result-container">
-        <span id="result"></span>
-        <button class="btn" id="clipboard">
-          <i class="far fa-clipboard"></i>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light" />
+  <meta name="description"
+    content="Shieldword generates strong, cryptographically secure passwords locally in your browser. Nothing is stored or sent anywhere." />
+  <title>Shieldword — Premium Password Generator</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="./" aria-label="Shieldword password generator home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+            stroke-linejoin="round" focusable="false">
+            <path d="M12 3 5 6v5c0 4.6 3 7.7 7 9 4-1.3 7-4.4 7-9V6l-7-3Z" />
+            <circle cx="12" cy="10.2" r="1.55" />
+            <path d="M12 11.75v2.9" />
+          </svg>
+        </span>
+        <span class="brand-text">
+          <span class="brand-name">Shieldword</span>
+        </span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a href="#password-field">Generator</a>
+        <a href="#length">Settings</a>
+        <a href="#strength">Strength</a>
+        <a href="#privacy">Privacy</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="header-cta" id="quick-generate" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M20.5 12a8.5 8.5 0 1 1-2.6-6.1" />
+            <path d="M20.8 4.2v5.3h-5.3" />
+          </svg>
+          <span>New password</span>
         </button>
       </div>
-      <div class="settings">
-        <div class="setting">
-          <label>Password Length</label>
-          <input type="number" id="length" min="4" max="20" value="20">
+    </div>
+  </header>
+
+  <div class="app">
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">Generate strong passwords</h1>
+      <p>Create secure, random passwords to protect your digital world.</p>
+    </section>
+
+    <noscript>
+      <p class="notice">
+        This password generator needs JavaScript to create passwords securely inside your
+        browser.
+      </p>
+    </noscript>
+
+    <main class="card" aria-label="Password generator">
+      <section class="password-panel" aria-label="Generated password">
+        <div class="password-field" id="password-field">
+          <span class="password-value" id="result"></span>
+          <div class="password-actions">
+            <button class="icon-btn" id="toggle-visibility" type="button" aria-label="Hide password"
+              aria-pressed="false" title="Show or hide password">
+              <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M2.5 12S6 6.2 12 6.2 21.5 12 21.5 12 18 17.8 12 17.8 2.5 12 2.5 12Z" />
+                <circle cx="12" cy="12" r="2.9" />
+              </svg>
+              <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="m3 3 18 18" />
+                <path d="M10.4 6.4A9.9 9.9 0 0 1 12 6.2c6 0 9.5 5.8 9.5 5.8a16 16 0 0 1-3.3 3.9" />
+                <path d="M6.6 6.7A15.7 15.7 0 0 0 2.5 12S6 17.8 12 17.8a9.4 9.4 0 0 0 3.2-.5" />
+                <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+              </svg>
+            </button>
+            <button class="icon-btn" id="clipboard" type="button" aria-label="Copy password" title="Copy password">
+              <svg class="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <rect x="9" y="9" width="11.5" height="11.5" rx="2.4" />
+                <path d="M6.4 15H5.2A2.2 2.2 0 0 1 3 12.8V5.2A2.2 2.2 0 0 1 5.2 3h7.6A2.2 2.2 0 0 1 15 5.2v1.2" />
+              </svg>
+              <svg class="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="m20 6.5-11 11-5-5" />
+              </svg>
+            </button>
+          </div>
         </div>
-        <div class="setting">
-          <label>Include uppercase letters</label>
-          <input type="checkbox" id="uppercase" checked>
+
+        <div class="strength is-none" id="strength">
+          <div class="strength-track" aria-hidden="true">
+            <span class="strength-fill" id="strength-fill"></span>
+          </div>
+          <div class="strength-meta">
+            <span class="strength-label" id="strength-label">—</span>
+            <span class="strength-detail" id="strength-detail">No password yet</span>
+          </div>
         </div>
-        <div class="setting">
-          <label>Include lowercase letters</label>
-          <input type="checkbox" id="lowercase" checked>
+      </section>
+
+      <section class="config" aria-label="Password settings">
+        <div class="config-row">
+          <div class="config-heading">
+            <label for="length">Password length</label>
+            <output class="length-value" id="length-value" for="length">20</output>
+          </div>
+          <input class="slider" type="range" id="length" min="4" max="20" step="1" value="20" />
+          <div class="range-scale" aria-hidden="true">
+            <span>4</span>
+            <span>20</span>
+          </div>
         </div>
-        <div class="setting">
-          <label>Include numbers</label>
-          <input type="checkbox" id="numbers" checked>
+
+        <fieldset class="options">
+          <legend>Character options</legend>
+          <div class="option-grid">
+            <label class="toggle">
+              <input type="checkbox" id="uppercase" checked />
+              <span class="toggle-switch" aria-hidden="true"></span>
+              <span class="toggle-text">
+                <span class="toggle-title">Uppercase</span>
+                <span class="toggle-hint">A – Z</span>
+              </span>
+            </label>
+
+            <label class="toggle">
+              <input type="checkbox" id="lowercase" checked />
+              <span class="toggle-switch" aria-hidden="true"></span>
+              <span class="toggle-text">
+                <span class="toggle-title">Lowercase</span>
+                <span class="toggle-hint">a – z</span>
+              </span>
+            </label>
+
+            <label class="toggle">
+              <input type="checkbox" id="numbers" checked />
+              <span class="toggle-switch" aria-hidden="true"></span>
+              <span class="toggle-text">
+                <span class="toggle-title">Numbers</span>
+                <span class="toggle-hint">0 – 9</span>
+              </span>
+            </label>
+
+            <label class="toggle">
+              <input type="checkbox" id="symbols" checked />
+              <span class="toggle-switch" aria-hidden="true"></span>
+              <span class="toggle-text">
+                <span class="toggle-title">Symbols</span>
+                <span class="toggle-hint">! @ # $</span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+
+        <label class="toggle toggle-wide">
+          <input type="checkbox" id="exclude-ambiguous" />
+          <span class="toggle-switch" aria-hidden="true"></span>
+          <span class="toggle-text">
+            <span class="toggle-title">Exclude ambiguous characters</span>
+            <span class="toggle-hint">Avoids look-alikes such as O, 0, I, l and 1</span>
+          </span>
+        </label>
+      </section>
+
+      <button class="btn-primary" id="generate" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="M20.5 12a8.5 8.5 0 1 1-2.6-6.1" />
+          <path d="M20.8 4.2v5.3h-5.3" />
+        </svg>
+        <span>Generate password</span>
+      </button>
+
+      <p class="notice" id="notice" role="alert" hidden></p>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <a class="footer-logo" href="./" aria-label="Shieldword home">
+            <span class="brand-mark brand-mark-sm" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                stroke-linejoin="round" focusable="false">
+                <path d="M12 3 5 6v5c0 4.6 3 7.7 7 9 4-1.3 7-4.4 7-9V6l-7-3Z" />
+                <circle cx="12" cy="10.2" r="1.55" />
+                <path d="M12 11.75v2.9" />
+              </svg>
+            </span>
+            <span class="footer-name">Shieldword</span>
+          </a>
+          <p class="footer-tagline">
+            Client-side password security for the modern web. No accounts, no servers, no
+            stored secrets.
+          </p>
         </div>
-        <div class="setting">
-          <label>Include symbols</label>
-          <input type="checkbox" id="symbols" checked>
-        </div>
+
+        <nav class="footer-nav" aria-label="Footer">
+          <div class="footer-col">
+            <h2 class="footer-heading">Product</h2>
+            <ul class="footer-list">
+              <li><a href="#password-field">Password generator</a></li>
+              <li><a href="#length">Password settings</a></li>
+              <li><a href="#strength">Strength check</a></li>
+            </ul>
+          </div>
+          <div class="footer-col" id="privacy">
+            <h2 class="footer-heading">Privacy</h2>
+            <ul class="footer-list footer-list-plain">
+              <li>No storage</li>
+              <li>No tracking</li>
+              <li>No server calls</li>
+            </ul>
+          </div>
+        </nav>
       </div>
 
-      <button class="btn btn-large" id="generate">
-        Generate Password
-      </button>
+      <div class="footer-bar">
+        <p>&copy; 2026 Shieldword. All rights reserved.</p>
+      </div>
     </div>
-    <script src="script.js"></script>
-  </body>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+
 </html>
